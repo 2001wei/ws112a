@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊/登入系統</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <h1>註冊/登入系統</h1>
+
+    <div id="signupForm">
+        <h2>註冊</h2>
+        <form>
+            <label for="signupUsername">帳號：</label>
+            <input type="text" id="signupUsername" required>
+            <br>
+            <label for="signupPassword">密碼：</label>
+            <input type="password" id="signupPassword" required>
+            <br>
+            <button type="button" onclick="signup()">註冊</button>
+        </form>
+        <p id="signupMessage"></p>
+        <p>已有帳號？<a href="#" onclick="showLoginForm()">登入</a></p>
+    </div>
+
+    <div id="loginForm" style="display:none;">
+        <h2>登入</h2>
+        <form>
+            <label for="loginUsername">帳號：</label>
+            <input type="text" id="loginUsername" required>
+            <br>
+            <label for="loginPassword">密碼：</label>
+            <input type="password" id="loginPassword" required>
+            <br>
+            <button type="button" onclick="login()">登入</button>
+        </form>
+        <p id="loginMessage"></p>
+        <p>還沒有帳號？<a href="#" onclick="showSignupForm()">註冊</a></p>
+    </div>
+
+    <div id="systemAccess" style="display:none;">
+        <h2>進入系統</h2>
+        <p>登入成功！現在你可以開始使用系統了。</p>
+    </div>
+</div>
+
+<script>
+    let users = [];
+
+    function showLoginForm() {
+        document.getElementById('signupForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('loginMessage').innerText = '';
+    }
+
+    function showSignupForm() {
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('signupMessage').innerText = '';
+    }
+
+    function signup() {
+        const username = document.getElementById('signupUsername').value;
+        const password = document.getElementById('signupPassword').value;
+
+        if (username && password) {
+            if (users.some(user => user.username === username)) {
+                document.getElementById('signupMessage').innerText = '帳號已被使用過，請嘗試其他帳號。';
+            } else {
+                users.push({ username, password });
+                document.getElementById('signupMessage').innerText = '註冊成功！';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            }
+        } else {
+            document.getElementById('signupMessage').innerText = '請填寫完整的帳號和密碼。';
+        }
+    }
+
+    function login() {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const user = users.find(user => user.username === username && user.password === password);
+
+        if (user) {
+            document.getElementById('loginMessage').innerText = '登入成功！';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('systemAccess').style.display = 'block';
+        } else {
+            document.getElementById('loginMessage').innerText = '登入失敗，請檢查帳號密碼是否有錯！';
+        }
+    }
+</script>
+
+</body>
+</html>
